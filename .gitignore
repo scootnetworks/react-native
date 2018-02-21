@@ -41,7 +41,7 @@ buck-out
 .gradle
 local.properties
 *.iml
-/android/
+# /android/ uncommenting this so we can actually upload our archives to our git repo
 
 # Node
 node_modules

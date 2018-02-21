@@ -12,15 +12,15 @@ def isReleaseBuild() {
 }
 
 def getRepositoryUrl() {
-    return hasProperty('repositoryUrl') ? property('repositoryUrl') : 'https://oss.sonatype.org/service/local/staging/deploy/maven2/'
+//    return hasProperty('repositoryUrl') ? property('repositoryUrl') : 'https://oss.sonatype.org/service/local/staging/deploy/maven2/'
 }
 
 def getRepositoryUsername() {
-    return hasProperty('repositoryUsername') ? property('repositoryUsername') : ''
+//    return hasProperty('repositoryUsername') ? property('repositoryUsername') : ''
 }
 
 def getRepositoryPassword() {
-    return hasProperty('repositoryPassword') ? property('repositoryPassword') : ''
+//    return hasProperty('repositoryPassword') ? property('repositoryPassword') : ''
 }
 
 def configureReactNativePom(def pom) {
@@ -55,11 +55,11 @@ def configureReactNativePom(def pom) {
 }
 
 if (JavaVersion.current().isJava8Compatible()) {
-  allprojects {
-    tasks.withType(Javadoc) {
-      options.addStringOption('Xdoclint:none', '-quiet')
+    allprojects {
+        tasks.withType(Javadoc) {
+            options.addStringOption('Xdoclint:none', '-quiet')
+        }
     }
-  }
 }
 
 afterEvaluate { project ->
@@ -112,8 +112,8 @@ afterEvaluate { project ->
 
             repository(url: getRepositoryUrl()) {
                 authentication(
-                        userName: getRepositoryUsername(),
-                        password: getRepositoryPassword())
+                    userName: getRepositoryUsername(),
+                    password: getRepositoryPassword())
 
             }
 
