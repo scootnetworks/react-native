@@ -111,7 +111,15 @@ if [[ "$CONFIGURATION" = "Debug" && ! "$PLATFORM_NAME" == *simulator ]]; then
   echo "$IP" > "$DEST/ip.txt"
 fi
 
-BUNDLE_FILE="$DEST/main.jsbundle"
+#dest of bundle that gets included in the IPA
+BUNDLE_FILE="$DEST/main.jsbundle" 
+
+#where to put the bundle and sourcemap files
+mkdir -p $PROJECT_DIR/build
+SCOOT_DEST="$PROJECT_DIR/build"
+
+#location of source map file
+SCOOT_SOURCE_MAPS_FILE="$SCOOT_DEST/main.jsbundle.map"
 
 $NODE_BINARY $CLI_PATH $BUNDLE_COMMAND \
   $CONFIG_ARG \
@@ -120,7 +128,11 @@ $NODE_BINARY $CLI_PATH $BUNDLE_COMMAND \
   --dev $DEV \
   --reset-cache \
   --bundle-output "$BUNDLE_FILE" \
-  --assets-dest "$DEST"
+  --assets-dest "$DEST" \
+  --sourcemap-output "$SCOOT_SOURCE_MAPS_FILE"
+
+echo "copying bundle from $BUNDLE_FILE to $SCOOT_SOURCE_MAPS_FILE"
+cp "$BUNDLE_FILE" "$SCOOT_DEST/main.jsbundle"
 
 if [[ $DEV != true && ! -f "$BUNDLE_FILE" ]]; then
   echo "error: File $BUNDLE_FILE does not exist. This must be a bug with" >&2
