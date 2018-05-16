@@ -14,6 +14,8 @@ import android.location.LocationManager;
 import android.location.LocationProvider;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
+
 import com.facebook.common.logging.FLog;
 import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.Callback;
@@ -68,6 +70,13 @@ public class LocationModule extends ReactContextBaseJavaModule {
   public String getName() {
     return "LocationObserver";
   }
+
+  @Override
+  public void onCatalystInstanceDestroy() {
+    Log.d("LocationModule", "onCatalystInstanceDestroy() - will stop observing");
+    stopObserving();
+  }
+
 
   private static class LocationOptions {
     private final long timeout;
