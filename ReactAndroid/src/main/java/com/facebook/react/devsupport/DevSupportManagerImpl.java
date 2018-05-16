@@ -485,19 +485,20 @@ public class DevSupportManagerImpl implements
         new Runnable() {
           @Override
           public void run() {
-            if (mRedBoxDialog == null) {
-              Activity context = mReactInstanceManagerHelper.getCurrentActivity();
-              if (context == null || context.isFinishing()) {
-                FLog.e(ReactConstants.TAG, "Unable to launch redbox because react activity " +
-                  "is not available, here is the error that redbox would've displayed: " + message);
-                return;
-              }
-              mRedBoxDialog = new RedBoxDialog(context, DevSupportManagerImpl.this, mRedBoxHandler);
+            Activity activity = mReactInstanceManagerHelper.getCurrentActivity();
+
+            if(activity == null || activity.isFinishing()) {
+              FLog.e(ReactConstants.TAG, "Unable to launch redbox because react activity "
+                  + "is not available, here is the error that redbox would've displayed: " + message);
+              return;
             }
-            if (mRedBoxDialog.isShowing()) {
+            if (mRedBoxDialog != null && mRedBoxDialog.isShowing()) {
               // Sometimes errors cause multiple errors to be thrown in JS in quick succession. Only
               // show the first and most actionable one.
               return;
+            }
+            if(mRedBoxDialog == null || mRedBoxDialog.getOwnerActivity() != activity){
+              mRedBoxDialog = new RedBoxDialog(activity, DevSupportManagerImpl.this, mRedBoxHandler);
             }
             Pair<String, StackFrame[]> errorInfo = processErrorCustomizers(Pair.create(message, stack));
             mRedBoxDialog.setExceptionDetails(errorInfo.first, errorInfo.second);
