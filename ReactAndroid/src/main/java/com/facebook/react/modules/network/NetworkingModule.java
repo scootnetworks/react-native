@@ -46,6 +46,7 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 import okhttp3.ResponseBody;
+import okio.BufferedSink;
 import okio.ByteString;
 
 /**
@@ -421,9 +422,13 @@ public final class NetworkingModule extends ReactContextBaseJavaModule {
       requestBody = RequestBodyUtil.getEmptyBody(method);
     }
 
-    requestBuilder.method(
-      method,
-      wrapRequestBodyWithProgressEmitter(requestBody, eventEmitter, requestId));
+    /**
+     * see {@link ProgressRequestBody#writeTo(BufferedSink)}  for an explanation on why we are not going to wrap all of our
+     * requests using the progress listener...
+     * old code:
+     * requestBuilder.method(method, wrapRequestBodyWithProgressEmitter(requestBody, eventEmitter, requestId));
+     */
+    requestBuilder.method(method, requestBody);
 
     addRequest(requestId);
     client.newCall(requestBuilder.build()).enqueue(
